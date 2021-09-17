@@ -16,14 +16,23 @@ public class Main {
         DataManager dm = new DataManager("./data/data.txt");
         ArrayList<Task> tasksData = dm.loadData();
 
-        System.out.println("Printing deadlines");
+        /*System.out.println("Printing deadlines");
         printDeadlines(tasksData);
+
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
         printDeadlinesUsingStream(tasksData);
 
         ArrayList<Task> filteredList = filterTasksByString(tasksData,"11");
         printData(filteredList);
+
+        System.out.println("Total number of deadlines: " + countDeadlines(tasksData));*/
+
+        printDataWithStreams(tasksData);
+        printDeadlinesUsingStream(tasksData);
+        System.out.println("Total number of deadlines (using stream): " +
+                countDeadlinesUsingStream(tasksData));
+
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -36,10 +45,23 @@ public class Main {
         return count;
     }
 
+    private static int countDeadlinesUsingStream(ArrayList<Task> tasks){
+        int count = (int)tasks.stream()
+                .filter((t) -> t instanceof Deadline) //filtering operation using lamda
+                .count();
+        return count;
+    }
+
     public static void printData(ArrayList<Task> tasksData) {
         for (Task t : tasksData) {
             System.out.println(t);
         }
+    }
+
+    public static void printDataWithStreams(ArrayList<Task> tasks) {
+        System.out.println("Printing data using stream");
+        tasks.stream() // convert data to stream
+                .forEach(System.out::println); //terminal operator
     }
 
     public static void printDeadlines(ArrayList<Task> tasksData) {
@@ -49,6 +71,7 @@ public class Main {
             }
         }
     }
+
 
     public static void printDeadlinesUsingStream(ArrayList<Task> tasks){
         tasks.stream()
@@ -63,5 +86,7 @@ public class Main {
                 .collect(Collectors.toList());
         return filteredList;
     }
+
+
 
 }
